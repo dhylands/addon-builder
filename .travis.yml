@@ -1,0 +1,28 @@
+dist: trusty
+sudo: required
+
+language: node_js
+node_js: 8
+
+os:
+- linux
+- osx
+
+before_install:
+- if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then ./create-rpxc.sh; fi
+- if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then docker ps -a; fi
+
+script:
+- "./build-addons.sh"
+
+deploy:
+  provider: s3
+  access_key_id: AKIAJOBVXIJ6KA4T6O7Q
+  secret_access_key:
+    secure: tuCNb+vRh1iJ2pmSB2ME/5egRMa4Hbs/6Cqe2t9gaigrcxoeJmvpJGw70IuHNes4wYgAKlB0TwBHSorrQincXWhuHv7+Tm8Kub9WbyfTXvNPw8W/kWKyO7buHNgAPNlNGrGBhwPo7K9Cycrc3UNIkjFk3ReSgUeE4/FWzX/GDyzDr/+6ZxkFRBkc+8oSaIJR/UROJc3NGCiRJmkaQjOLkuNRm4XLwdb+Y/eN6I4GgVTYfRA5nHCL5mRyVCisw1LfNwQRNzPq7X2H16sprxGdzh1VxrUA/xcTdEsrGWxVG8Ljew761nsbGHZVhwHRTxx7axhVl0hXbmniLieBqkjayvPDlrdgzAH2yHzH0BPGIPnR9rmTc2ECgFvYmdNcbQlzjl01tRS9aJQ6BFKIkPpfzmWweOdxJhnD/IluyPbHSifcMpoe7PYOPsfK0VStrszUfkm3XyRy635L1+GpmJAXPEgMTGlHAVbvbtmcKeLmCGtKfAdTicSwCu3imJ6n72QY9X69iJIBIrB/Ym2sKr0NXUJXI+DJpUEaTeZvyLhWN8KG5QkIxN1jHvNAI4TShOAK7ipkPIMKphSsiGQDQxHjIGDX2LFOy9uH9Rz1w/Rd09kgduWGEl1j5qjWkw5EIJJ/bTFauQ1KhgsDjA6b80IApPkvjOHzuiTxASLe301V3Qg=
+  bucket: mozillagatewayimages
+  region: us-west-1
+  local-dir: addons
+  upload-dir: addons
+  acl: public_read
+  skip_cleanup: true

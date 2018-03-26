@@ -1,0 +1,16 @@
+[submodule "gpio-adapter"]
+	path = gpio-adapter
+	url = https://github.com/dhylands/gpio-adapter
+	branch = update-package.sh
+[submodule "serial-adapter"]
+	path = serial-adapter
+	url = https://github.com/dhylands/serial-adapter
+	branch = update-package.sh
+[submodule "zigbee-adapter"]
+	path = zigbee-adapter
+	url = https://github.com/dhylands/zigbee-adapter
+	branch = update-package.sh
+[submodule "zwave-adapter"]
+	path = zwave-adapter
+	url = https://github.com/dhylands/zwave-adapter
+	branch = update-package.sh
