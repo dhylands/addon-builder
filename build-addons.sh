@@ -68,5 +68,5 @@ done
 ls -l addons
 echo "Download links:"
 for FILE in addons/*; do
-  echo "  https://s3-us-west-1.amazonaws.com/mozillagatewayimages/${FILE}"
+  echo "  https://s3-us-west-1.amazonaws.com/mozilla-gateway-addons/$(basename ${FILE})"
 done
