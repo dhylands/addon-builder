@@ -67,6 +67,7 @@ done
 
 ls -l addons
 echo "Download links:"
-for FILE in addons/*; do
-  echo "  https://s3-us-west-1.amazonaws.com/mozilla-gateway-addons/$(basename ${FILE})"
+for FILE in addons/*.tgz; do
+  CHECKSUM=$(cat ${FILE}.sha256sum | cut -f 1 -d ' ')
+  echo "  https://s3-us-west-2.amazonaws.com/mozilla-gateway-addons/$(basename ${FILE}) ${CHECKSUM}"
 done
