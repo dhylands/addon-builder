@@ -1,16 +1,16 @@
 [submodule "gpio-adapter"]
 	path = gpio-adapter
-	url = https://github.com/dhylands/gpio-adapter
-	branch = update-package.sh
+	url = https://github.com/mozilla-iot/gpio-adapter
+	branch = master
 [submodule "serial-adapter"]
 	path = serial-adapter
-	url = https://github.com/dhylands/serial-adapter
-	branch = update-package.sh
+	url = https://github.com/mozilla-iot/serial-adapter
+	branch = master
 [submodule "zigbee-adapter"]
 	path = zigbee-adapter
-	url = https://github.com/dhylands/zigbee-adapter
-	branch = update-package.sh
+	url = https://github.com/mozilla-iot/zigbee-adapter
+	branch = master
 [submodule "zwave-adapter"]
 	path = zwave-adapter
-	url = https://github.com/dhylands/zwave-adapter
-	branch = update-package.sh
+	url = https://github.com/mozilla-iot/zwave-adapter
+	branch = master
