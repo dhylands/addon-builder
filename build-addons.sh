@@ -47,7 +47,7 @@ esac
 
 git submodule update --init --remote
 git submodule status
-mkdir -p addons
+mkdir -p builder
 
 if [ -z "${ADAPTERS}" ]; then
   # No adapters were provided via the environment, build them all
@@ -65,9 +65,9 @@ for ADDON_ARCH in ${ADDON_ARCHS}; do
   done
 done
 
-ls -l addons
+ls -l builder
 echo "Download links:"
-for FILE in addons/*.tgz; do
+for FILE in builder/*.tgz; do
   CHECKSUM=$(cat ${FILE}.sha256sum | cut -f 1 -d ' ')
-  echo "  https://s3-us-west-2.amazonaws.com/mozilla-gateway-addons/$(basename ${FILE}) ${CHECKSUM}"
+  echo "  https://s3-us-west-2.amazonaws.com/mozilla-gateway-addons/builder/$(basename ${FILE}) ${CHECKSUM}"
 done

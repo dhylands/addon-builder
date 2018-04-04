@@ -12,5 +12,5 @@
 	branch = master
 [submodule "zwave-adapter"]
 	path = zwave-adapter
-	url = https://github.com/mozilla-iot/zwave-adapter
-	branch = master
+	url = https://github.com/dhylands/zwave-adapter
+	branch = add-openzwave-shared-dep

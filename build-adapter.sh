@@ -55,6 +55,6 @@ fi
 ADDON_ARCH=${ADDON_ARCH} ./package.sh
 for TARFILE in *-${ADDON_ARCH}*.tgz; do
   sha256sum "${TARFILE}" > "${TARFILE}.sha256sum"
-  mv "${TARFILE}" ../addons/
-  mv "${TARFILE}.sha256sum" ../addons/
+  mv "${TARFILE}" ../builder/
+  mv "${TARFILE}.sha256sum" ../builder/
 done
