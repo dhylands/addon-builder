@@ -17,3 +17,4 @@ ${RPXC} install-raspbian libudev-dev
 ${RPXC} install-debian pkg-config
 ${RPXC} install-debian python
 ${RPXC} install-debian python2.7
+${RPXC} install-debian unzip

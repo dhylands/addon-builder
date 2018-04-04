@@ -9,11 +9,10 @@ os:
 - osx
 
 before_install:
-- if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then ./create-rpxc.sh; fi
-- if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then docker ps -a; fi
+- if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then ./before-install-linux.sh; fi
 
 script:
-- "./build-addons.sh"
+- ./build-addons.sh
 
 deploy:
   provider: s3
