@@ -48,6 +48,12 @@ if [ -f "package.json" ]; then
   rm -rf node_modules
 fi
 
+if [ "${ADDON_ARCH}" == "linux-arm" ]; then
+  # Setup some cross compiler variables
+  SYSROOT=/rpxc/sysroot
+  CROSS_COMPILE="arm-linux-gnueabihf-"
+fi
+
 if [ "${ADAPTER}" == "zwave-adapter" ]; then
   # Build and install the OpenZWave library.
   # The hash used here should match the hash from rpi-image-builder
@@ -57,20 +63,14 @@ if [ "${ADAPTER}" == "zwave-adapter" ]; then
   curl --output openzwave.zip ${OPENZWAVE_ZIP}
   unzip -q openzwave.zip
 
-  OPEN_ZWAVE="OpenZWave/open-zwave"
-  mkdir -p ${OPEN_ZWAVE}
+  OPEN_ZWAVE="open-zwave"
   rm -rf ${OPEN_ZWAVE}
   mv open-zwave-${OPENZWAVE_HASH} ${OPEN_ZWAVE}
 
   if [ "${ADDON_ARCH}" == "linux-arm" ]; then
-    # Cross compile Open-ZWave
-    ARCH="armv6l"
-    SYSROOT=/rpxc/sysroot
-    CROSS_COMPILE="arm-linux-gnueabihf-"
-
     # Under rpxc /rpxc/sysroot/usr/lib/arm-linux-gnueabihf/libudev.so is
     # a symlink back to /lib/arm-linux-gnueabihf/libudev.so.1.5.0 which
-    # doesn't exist. So we go ahead and crete a symlink there and point
+    # doesn't exist. So we go ahead and create a symlink there and point
     # it to the same path under /rpxc/sysroot
     #
     # My guess is that this would be fine for chrooted apps, but I don't
@@ -87,18 +87,24 @@ if [ "${ADAPTER}" == "zwave-adapter" ]; then
     # pkg-config to determine where openzwave is installed and expects that the
     # build tree and the install tree are the same. The host build doesn't need to
     # use openzwave, so we can get away with this sleight of hand for now.
+    ARCH="armv6l"
     INSTALL_OPENZWAVE="PREFIX=/usr make  -C ${OPEN_ZWAVE} CROSS_COMPILE=${CROSS_COMPILE} MACHINE=${ARCH} install"
     sudo ${INSTALL_OPENZWAVE}
     sudo DESTDIR=${SYSROOT} ${INSTALL_OPENZWAVE}
 
-    # setup cross-compiler for node
-    OPTS="--sysroot=${SYSROOT}"
-    export CC="${CROSS_COMPILE}gcc ${OPTS}"
-    export CXX="${CROSS_COMPILE}g++ ${OPTS}"
   else
     make -C ${OPEN_ZWAVE}
     sudo make -C ${OPEN_ZWAVE} install
   fi
+fi
+
+if [ "${ADDON_ARCH}" == "linux-arm" ]; then
+  # setup cross-compiler for node. This needs to be kept after
+  # the openzwave build so that the CC and CXX defines don't mess
+  # up anything done by the openzwave Makefile.
+  OPTS="--sysroot=${SYSROOT}"
+  export CC="${CROSS_COMPILE}gcc ${OPTS}"
+  export CXX="${CROSS_COMPILE}g++ ${OPTS}"
 fi
 
 ADDON_ARCH=${ADDON_ARCH} ./package.sh
