@@ -9,11 +9,10 @@ os:
 - osx
 
 before_install:
-- if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then ./create-rpxc.sh; fi
-- if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then docker ps -a; fi
+- if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then ./before-install-linux.sh; fi
 
 script:
-- "./build-addons.sh"
+- ./build-addons.sh
 
 deploy:
   provider: s3
@@ -22,6 +21,7 @@ deploy:
     secure: KWUlhI8lx0slEv90uuJ3aXhVCNoTViUG1MEDqZxyETtjWpfUy3QjfsxSXfJlarqq633jdXB98nv1TfDPBmiDddHB5E8EtViH1yzhW1LIBKmxkBl9gf5u0fWMODRX/QbE2Tm2f8836XVGufQNrSAZgIvsubZ2iy3FVD4J6QhXWPMnnT96/KCH6gICXVNIn8jVo8vbiJvZfwlpAdg0IqkvXB4bfZ0XzEdwgcsPXKq+e0u7BK3euajyoQ3YjINubqulplPEE2V348zHHn3pOyiGB+2POmlCG7oKO+vquqvIZV+rblSWqksPi8a/jpQmR3NjPAAJqPND1F2ZS31D4Ao5aFLEFZdjDEkQfphawd9G4NuYCkRlEwkpAblGF+cXH1f/EsIHYqpf3TUUSvh5YVUgpL4GSHruwPCRKiQvW7FbOD93CPLTV/sRik0VjV1HXv+yMf2TMZraMdFa27QQHpFjcdTec7Yzy21fBm4eEjDN5AKcbtGnNAotZp43UVGZDBmz1teasjEAqE5ceoqR8QQOFSz5hXnHhsktVGNpLf0iOY4cisxua3UP5/22hKqSseDQUSDz6hQJBBlXmk+b9RGT2Xtu5G1DE2oBPOtYsmyMk30M4tNvnuYOyuoHlSHBi6lt+6Uxa+gCnXINVw4K8wNsEbcYGee8NCksfUqBL1Zck1E=
   bucket: mozilla-gateway-addons
   region: us-west-2
-  local-dir: addons
+  local-dir: builder
+  upload-dir: builder
   acl: public_read
   skip_cleanup: true
