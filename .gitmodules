@@ -15,7 +15,7 @@
 	branch = master
 [submodule "zwave-adapter"]
 	path = zwave-adapter
-	url = https://github.com/mozilla-iot/zwave-adapter
+	url = https://github.com/dhylands/zwave-adapter
 	branch = openwrt-crash
 [submodule "microblocks-adapter"]
 	path = microblocks-adapter
