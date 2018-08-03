@@ -24,3 +24,5 @@ deploy:
   upload-dir: builder
   acl: public_read
   skip_cleanup: true
+  on:
+    branch: openwrt-crash
