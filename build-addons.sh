@@ -58,11 +58,6 @@ mkdir -p builder
 if [ -z "${ADAPTERS}" ]; then
   # No adapters were provided via the environment, build them all
   ADAPTERS=(
-    gpio-adapter
-    microblocks-adapter
-    serial-adapter
-    thing-url-adapter
-    zigbee-adapter
     zwave-adapter
   )
 fi

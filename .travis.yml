@@ -6,7 +6,6 @@ node_js: 8
 
 os:
 - linux
-- osx
 
 before_install:
 - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then ./before-install-linux.sh; fi
