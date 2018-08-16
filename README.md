@@ -30,3 +30,17 @@ also view all of the addons by using:
 ```
 aws s3 ls s3://mozilla-gateway-addons/
 ```
+
+# Building the docker cross compiler image
+
+To build the docker image, do the following steps:
+```
+git clone https://github.com/mozilla-iot/docker-raspberry-pi-cross-compiler.git
+cd docker-raspberry-pi-cross-compiler
+git checkout rpxc-stretch
+export RPXC_IMAGE=dhylands/raspberry-pi-cross-compiler-stretch
+./build.sh
+docker push ${RPXC_IMAGE}
+```
+If you're not dhylands then you'll need to change the username appropriately,
+and also modify the create-rpxc.sh script in this repository.
