@@ -2,6 +2,8 @@
 
 set -e
 
+NODE_VERSION=$(node --version | cut -d. -f1 | sed 's/^v//')
+
 if [ -z "${TRAVIS_OS_NAME}" ]; then
   # This means we're running locally. Fake out TRAVIS_OS_NAME.
   UNAME=$(uname -s)
@@ -57,15 +59,38 @@ mkdir -p builder
 
 if [ -z "${ADAPTERS}" ]; then
   # No adapters were provided via the environment, build them all
-  ADAPTERS=(
-    gpio-adapter
-    homekit-adapter
-    microblocks-adapter
-    serial-adapter
-    thing-url-adapter
-    zigbee-adapter
-    zwave-adapter
-  )
+  case "${NODE_VERSION}" in
+    8)
+      ADAPTERS=(
+        gpio-adapter
+        homekit-adapter
+        microblocks-adapter
+        serial-adapter
+        thing-url-adapter
+        zigbee-adapter
+        zwave-adapter
+      )
+      ;;
+    10)
+      # Disable adapters which depend on noble for now, as it fails to build
+      # with Node v10.
+      #
+      # See: https://github.com/noble/noble/issues/805
+      #
+      # Also, disable zwave-adapter, as openzwave-shared needs to be updated
+      # to work with Node v10.
+      ADAPTERS=(
+        gpio-adapter
+        microblocks-adapter
+        serial-adapter
+        zigbee-adapter
+      )
+      ;;
+    *)
+      echo "Unsupported NODE_VERSION = ${NODE_VERSION}"
+      exit 1
+      ;;
+  esac
 fi
 
 for ADDON_ARCH in ${ADDON_ARCHS}; do
@@ -75,7 +100,7 @@ for ADDON_ARCH in ${ADDON_ARCHS}; do
     RPXC=
   fi
   for ADAPTER in ${ADAPTERS[@]}; do
-    ${RPXC} bash -c "cd ${ADAPTER}; ../build-adapter.sh ${ADDON_ARCH}"
+    ${RPXC} bash -c "cd ${ADAPTER}; ../build-adapter.sh ${ADDON_ARCH} ${NODE_VERSION}"
   done
 done
 
