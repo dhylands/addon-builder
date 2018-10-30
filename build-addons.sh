@@ -53,8 +53,27 @@ case "${TRAVIS_OS_NAME}" in
 
 esac
 
+if [ -n "${PULL_REQUEST}" ]; then
+  if [ "${#ADAPTERS[@]}" != 1 ]; then
+    echo "Must specify exactly one adapter when using pull request option."
+    exit 1
+  fi
+  if ! [[ "${PULL_REQUEST}" =~ ^[0-9]+$ ]]; then
+    echo "Expecting numeric pull request; Got '${PULL_REQUEST}'"
+    exit 1
+  fi
+fi
+
 git submodule update --init --remote
 git submodule status
+
+if [ -n "${PULL_REQUEST}" ]; then
+  (
+    cd ${ADAPTERS}
+    git fetch -fu origin pull/${PULL_REQUEST}/head:pr/origin/${PULL_REQUEST}
+  )
+fi
+
 mkdir -p builder
 
 if [ -z "${ADAPTERS}" ]; then

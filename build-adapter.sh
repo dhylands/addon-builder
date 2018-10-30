@@ -109,6 +109,11 @@ fi
 
 ADDON_ARCH=${ADDON_ARCH} ./package.sh
 for TARFILE in *-${ADDON_ARCH}*.tgz; do
+  if [ -n "${PULL_REQUEST}" ]; then
+    NEW_TARFILE="${TARFILE/${ADDON_ARCH}/-pr-${PULL_REQUEST}-${ADDON_ARCH}}"
+    mv "${TARFILE}" "${NEW_TARFILE}"
+    TARFILE="${NEW_TARFILE}"
+  fi
   sha256sum "${TARFILE}" > "${TARFILE}.sha256sum"
   mv "${TARFILE}" ../builder/
   mv "${TARFILE}.sha256sum" ../builder/

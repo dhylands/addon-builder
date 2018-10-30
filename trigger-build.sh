@@ -18,8 +18,26 @@ addEnv() {
 
 VERBOSE=0
 
-while getopts "hv:" opt "$@"; do
+while getopts "hv-:" opt "$@"; do
   case ${opt} in
+
+    -)
+      case ${OPTARG} in
+        pr)
+          PULL_REQUEST="${!OPTIND}"
+          OPTIND=$(( $OPTIND + 1 ))
+          ;;
+
+        help)
+          usage
+          ;;
+
+        *)
+          echo "Unrecognized option: ${OPTARG}"
+          exit 1
+          ;;
+      esac
+      ;;
 
     h)
       usage
@@ -41,11 +59,27 @@ shift $((OPTIND-1))
 ADAPTERS="$@"
 
 if [ "${VERBOSE}" == 1 ]; then
-  echo "ADAPTERS = '${ADAPTERS}"
+  echo "ADAPTERS = '${ADAPTERS}'"
+  echo "PULL_REQUEST = '${PULL_REQUEST}'"
+fi
+
+if ! [[ "${PULL_REQUEST}" =~ ^[0-9]+$ ]]; then
+  echo "Expecting numeric pull request; Got '${PULL_REQUEST}'"
+  exit 1
+fi
+if [ -n "${PULL_REQUEST}" ]; then
+  if [ "${#ADAPTERS[@]}" != 1 ]; then
+    echo "Must specify exactly one adapter when using pull request option."
+    exit 1
+  fi
 fi
 
 if [ -n "${ADAPTERS}" ]; then
   addEnv ADAPTERS "${ADAPTERS}"
+fi
+
+if [ -n "${PULL_REQUEST}" ]; then
+  addEnv PULL_REQUEST "${PULL_REQUEST}"
 fi
 
 if [ "${VERBOSE}" == 1 ]; then
