@@ -13,6 +13,7 @@ ADDON_ARCH="$1"
 
 NVM_VERSION="v0.33.8"
 NODE_VERSION="$2"
+PULL_REQUEST="$3"
 
 if [ -z "${ADDON_ARCH}" ]; then
   echo "Usage: ${SCRIPTNAME} addon-arch"
@@ -22,7 +23,11 @@ fi
 ADAPTER="$(basename $(pwd))"
 
 echo "============================================================="
-echo "Building ADDON_ARCH=${ADDON_ARCH} ADAPTER=${ADAPTER}"
+if [ -n "${PULL_REQUEST}" ]; then
+  echo "Building ADDON_ARCH=${ADDON_ARCH} ADAPTER=${ADAPTER} PULL_REQUEST=${PULL_REQUEST}"
+else
+  echo "Building ADDON_ARCH=${ADDON_ARCH} ADAPTER=${ADAPTER}"
+fi
 echo "============================================================="
 
 if [ -f "package.json" ]; then
@@ -110,7 +115,7 @@ fi
 ADDON_ARCH=${ADDON_ARCH} ./package.sh
 for TARFILE in *-${ADDON_ARCH}*.tgz; do
   if [ -n "${PULL_REQUEST}" ]; then
-    NEW_TARFILE="${TARFILE/${ADDON_ARCH}/-pr-${PULL_REQUEST}-${ADDON_ARCH}}"
+    NEW_TARFILE="${TARFILE/${ADDON_ARCH}/pr-${PULL_REQUEST}-${ADDON_ARCH}}"
     mv "${TARFILE}" "${NEW_TARFILE}"
     TARFILE="${NEW_TARFILE}"
   fi
