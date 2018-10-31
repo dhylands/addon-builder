@@ -71,6 +71,7 @@ if [ -n "${PULL_REQUEST}" ]; then
   (
     cd ${ADAPTERS}
     git fetch -fu origin pull/${PULL_REQUEST}/head:pr/origin/${PULL_REQUEST}
+    git checkout pr/origin/${PULL_REQUEST}
   )
 fi
 
@@ -119,7 +120,7 @@ for ADDON_ARCH in ${ADDON_ARCHS}; do
     RPXC=
   fi
   for ADAPTER in ${ADAPTERS[@]}; do
-    ${RPXC} bash -c "cd ${ADAPTER}; ../build-adapter.sh ${ADDON_ARCH} ${NODE_VERSION}"
+    ${RPXC} bash -c "cd ${ADAPTER}; ../build-adapter.sh ${ADDON_ARCH} ${NODE_VERSION} '${PULL_REQUEST}'"
   done
 done
 
