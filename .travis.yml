@@ -15,7 +15,7 @@ os:
 - osx
 
 before_install:
-  - mkdir -p "${HOMEBREW_LOGS}"
+  - mkdir -p /tmp/homebrew/logs
   - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then ./before-install-linux.sh; fi
 
 script:
