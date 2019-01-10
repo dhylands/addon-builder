@@ -9,6 +9,7 @@ node_js:
 env:
   global:
     - HOMEBREW_LOGS=/tmp/homebrew/logs
+    - HOMEBREW_TEMP=/tmp/homebrew/tmp
 
 os:
 - linux
@@ -16,6 +17,7 @@ os:
 
 before_install:
   - mkdir -p /tmp/homebrew/logs
+  - mkdir -p /tmp/homebrew/tmp
   - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then ./before-install-linux.sh; fi
 
 script:
