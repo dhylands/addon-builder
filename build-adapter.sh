@@ -73,7 +73,9 @@ fi
 if [ "${ADAPTER}" == "zwave-adapter" ]; then
   # Build and install the OpenZWave library.
   # The hash used here should match the hash from rpi-image-builder
-  OPENZWAVE_HASH="ab5fe966fee882bb9e8d78a91db892a60a1863d9"
+
+  # Use a hash from the Dev branch, which has CentralScene support
+  OPENZWAVE_HASH="365345c78a1546daab0a717cb5be0b054099358c"
   OPENZWAVE_ZIP="https://codeload.github.com/OpenZWave/open-zwave/zip/${OPENZWAVE_HASH}"
   rm -rf openzwave.zip open-zwave-${OPENZWAVE_HASH}
   curl --output openzwave.zip ${OPENZWAVE_ZIP}
