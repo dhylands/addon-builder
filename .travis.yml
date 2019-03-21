@@ -13,7 +13,6 @@ env:
 
 os:
 - linux
-- osx
 
 before_install:
   - mkdir -p /tmp/homebrew/logs
