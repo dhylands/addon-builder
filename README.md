@@ -23,13 +23,28 @@ the command line.
 ./trigger-build.sh gpio-adapter
 ```
 
+You can also build a pull request of an adapter. Use the --pr option. For example:
+```
+./trigger-build.sh --pr 52 zwave-adapter
+```
+The built tarball will have pr-99 in the filename. For example:
+```
+https://s3-us-west-2.amazonaws.com/mozilla-gateway-addons/builder/zwave-adapter-0.7.1-pr-52-linux-arm-v8.tgz
+```
+
 # Deployed tarballs
 
-The tarballs that are built will be deployed to mozilla-gateway-addons AWS bucket. URLs to the addons will be printed at the end of the job. You can
+The tarballs that are built will be deployed to mozilla-gateway-addons AWS bucket.
+URLs to the addons will be printed at the end of the job. You can
 also view all of the addons by using:
 ```
 aws s3 ls s3://mozilla-gateway-addons/
 ```
+or
+```
+aws s3 ls s3://mozilla-gateway-addons/builder/
+```
+to view the addons which have been built (but not yet deployed).
 
 # Building the docker cross compiler image
 
@@ -38,9 +53,11 @@ To build the docker image, do the following steps:
 git clone https://github.com/mozilla-iot/docker-raspberry-pi-cross-compiler.git
 cd docker-raspberry-pi-cross-compiler
 git checkout rpxc-stretch
-export RPXC_IMAGE=dhylands/raspberry-pi-cross-compiler-stretch
 ./build.sh
-docker push ${RPXC_IMAGE}
 ```
 If you're not dhylands then you'll need to change the username appropriately,
-and also modify the create-rpxc.sh script in this repository.
+and also modify the create-rpxc.sh script in
+[this](https://github.com/mozilla-iot/addon-builder/blob/master/create-rpxc.sh)
+repository and the
+[rpi-image-builder](https://github.com/mozilla-iot/rpi-image-builder/blob/master/create-rpxc.sh)
+repository.
