@@ -30,7 +30,7 @@ fi
 case "${TRAVIS_OS_NAME}" in
 
   linux)
-    ADDON_ARCHS="linux-arm linux-x64"
+    ADDON_ARCHS="linux-arm linux-x64 openwrt-linux-arm"
     ;;
 
   osx)
@@ -91,14 +91,31 @@ if [ -z "${ADAPTERS}" ]; then
   )
 fi
 
+SKIP_ADAPTERS=()
 for ADDON_ARCH in ${ADDON_ARCHS}; do
-  if [ "${ADDON_ARCH}" == "linux-arm" ]; then
-    RPXC="./bin/rpxc"
-  else
-    RPXC=
-  fi
+  case "${ADDON_ARCH}" in
+
+    linux-arm)
+      RPXC="./bin/rpxc"
+      ;;
+
+    openwrt-linux-arm)
+      RPXC="./bin/owrt"
+      SKIP_ADAPTERS=(homekit-adapter thing-url-adapter)
+      ;;
+
+    *)
+      RPXC=
+      ;;
+  esac
   for ADAPTER in ${ADAPTERS[@]}; do
-    ${RPXC} bash -c "cd ${ADAPTER}; ../build-adapter.sh ${ADDON_ARCH} ${NODE_VERSION} '${PULL_REQUEST}'"
+    if [[ " ${SKIP_ADAPTERS[@]} " =~ " ${ADAPTER} " ]]; then
+      echo "====="
+      echo "===== Skipping ${ADAPTER} for ${ADDON_ARCH} ====="
+      echo "====="
+    else
+      ${RPXC} bash -c "cd ${ADAPTER}; ../build-adapter.sh ${ADDON_ARCH} ${NODE_VERSION} '${PULL_REQUEST}'"
+    fi
   done
 done
 
