@@ -35,3 +35,6 @@
 [submodule "sensor-tag-adapter"]
 	path = sensor-tag-adapter
 	url = https://github.com/tim-hellhake/sensor-tag-adapter
+[submodule "medisana-ks250-adapter"]
+	path = medisana-ks250-adapter
+	url = https://github.com/tim-hellhake/medisana-ks250-adapter
