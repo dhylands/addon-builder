@@ -80,17 +80,17 @@ if [ "${ADAPTER}" == "zwave-adapter" ]; then
   # OpenWRT specific.
 
   OPEN_ZWAVE="open-zwave"
+  OZW_FLAGS=
+  OZW_BRANCH=moziot
   if [[ "${ADDON_ARCH}" =~ ^openwrt-.* ]]; then
-    OZW_BRANCH=moziot-openwrt
-  else
-    OZW_BRANCH=moziot
+    OZW_FLAGS="USE_HID=0"
   fi
   rm -rf ${OPEN_ZWAVE}
   git clone -b ${OZW_BRANCH} --single-branch --depth=1 https://github.com/mozilla-iot/open-zwave ${OPEN_ZWAVE}
 
   if [[ "${ADDON_ARCH}" =~ "linux-arm" ]]; then
     ARCH="armv6l"
-    PREFIX=/usr CFLAGS="--sysroot=${SYSROOT} -D_GLIBCXX_USE_CXX11_ABI=0" LDFLAGS="-v --sysroot=${SYSROOT}" make -C ${OPEN_ZWAVE} CROSS_COMPILE=${CROSS_COMPILE} MACHINE=${ARCH}
+    PREFIX=/usr CFLAGS="--sysroot=${SYSROOT} -D_GLIBCXX_USE_CXX11_ABI=0" LDFLAGS="-v --sysroot=${SYSROOT}" make -C ${OPEN_ZWAVE} CROSS_COMPILE=${CROSS_COMPILE} MACHINE=${ARCH} ${OZW_FLAGS}
 
     # Technically, this is incorrect. We should be setting DESTDIR to ${SYSROOT}.
     # By not setting DESTDIR we wind up installing the ARM version of
@@ -98,12 +98,12 @@ if [ "${ADAPTER}" == "zwave-adapter" ]; then
     # pkg-config to determine where openzwave is installed and expects that the
     # build tree and the install tree are the same. The host build doesn't need to
     # use openzwave, so we can get away with this sleight of hand for now.
-    INSTALL_OPENZWAVE="PREFIX=/usr make -C ${OPEN_ZWAVE} CROSS_COMPILE=${CROSS_COMPILE} MACHINE=${ARCH} install"
+    INSTALL_OPENZWAVE="PREFIX=/usr make -C ${OPEN_ZWAVE} CROSS_COMPILE=${CROSS_COMPILE} MACHINE=${ARCH} ${OZW_FLAGS} install"
     sudo ${INSTALL_OPENZWAVE}
     sudo DESTDIR=${SYSROOT} ${INSTALL_OPENZWAVE}
   else
-    make -C ${OPEN_ZWAVE}
-    sudo make -C ${OPEN_ZWAVE} install
+    make -C ${OPEN_ZWAVE} ${OZW_FLAGS}
+    sudo make -C ${OPEN_ZWAVE} ${OZW_FLAGS} install
   fi
 fi
 
