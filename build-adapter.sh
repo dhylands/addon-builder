@@ -60,7 +60,7 @@ fi
 
 case "${ADDON_ARCH}" in
 
-  openwrt-linux-arm)
+  openwrt-linux-*)
     # The ~/.owrt file is created as part of docker-openwrt-toolchain-builder
     # (look in the Dockerfile).
     source /home/build/.owrt

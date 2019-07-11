@@ -35,7 +35,9 @@ fi
 case "${TRAVIS_OS_NAME}" in
 
   linux)
-    ADDON_ARCHS="linux-arm linux-x64 openwrt-linux-arm"
+    # Raspberry Pi 2/3 arch is arm_cortex-a7_neon-vfpv4
+    # Turris Omnia arch is arm_cortex-a9_vfpv3
+    ADDON_ARCHS="linux-arm linux-x64 openwrt-linux-arm_cortex-a7_neon-vfpv4 openwrt-linux-arm_cortex-a9_vfpv3"
     ;;
 
   osx)
@@ -105,8 +107,8 @@ for ADDON_ARCH in ${ADDON_ARCHS}; do
       RPXC="./bin/rpxc"
       ;;
 
-    openwrt-linux-arm)
-      RPXC="./bin/owrt"
+    openwrt-linux-*)
+      RPXC="./bin/owrt-${ADDON_ARCH/openwrt-linux-/}"
       SKIP_ADAPTERS=(homekit-adapter)
       ;;
 
